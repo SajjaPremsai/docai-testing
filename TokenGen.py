@@ -44,14 +44,16 @@ def get_installation_token(installation_id: int, app_id: int) -> str:
     }
 
     # 4. Make a POST request to the GitHub API to create a new installation access token.
+    # This request exchanges the JWT for an installation-specific access token.
     response = requests.post(url, headers=headers)
 
     # 5. Check if the request was successful.
     # If the status code indicates an error (e.g., 4xx or 5xx),
-    # an HTTPError will be raised.
+    # an HTTPError will be raised, providing details about the failure.
     response.raise_for_status()
 
     # 6. Parse the JSON response and extract the 'token' field.
     # The response body contains details about the token, including the token string
-    # and its expiration time.
+    # and its expiration time. This token is then used for subsequent authenticated
+    # API calls on behalf of the installation.
     return response.json()["token"]
